@@ -1,0 +1,1 @@
+[{"name": "aaa", "password": "123", "alias": ["texttext"], "note": "ttteeexxxtt"}, {"name": "bbb", "password": "4321", "alias": ["aaa"], "note": "gretsf"}, {"name": "ccc", "password": "4321", "alias": ["abaa", "bbb"], "note": "ttxx"}, {"alias": "dadd", "name": "ddd", "password": "1357", "note": "texttextovy"}]
