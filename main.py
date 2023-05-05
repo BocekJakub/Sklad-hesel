@@ -1,73 +1,63 @@
-import json
-from typing import List
+from tkinter import *
+from tkinter import ttk
+
+# window
+window = Tk()
+window.title("Sklad hesel")
+window.minsize(400, 500)
+window.resizable(True, True)
+
+# fonts and colors
+main_font = ("Verdana", 12)
+main_color = "#e5eaf1"
+button_color = "#334560"
+front_color = "#f0f3f7"
+window.config(bg=main_color)
+
+# frames
+input_frame = Frame(window, bg=main_color)
+text_frame = Frame(window, bg=main_color)
+buttons_frame = Frame(window, bg=main_color)
+input_frame.pack()
+text_frame.pack()
+buttons_frame.pack()
+
+# input frame
+title_label = Label(input_frame, text="", width=20, bg=main_color, font=main_font)
+search_label = Label(input_frame, text="Hledat: ", width=20, bg=main_color, font=main_font)
+input_box = Entry(input_frame, width=19,  borderwidth=2, font=main_font)
+choice_list = ttk.Combobox(input_frame, width=19, font=main_font)
+title_label.grid(row=0, column=0, padx=5, pady=5)
+search_label.grid(row=1, column=0, padx=5, pady=5)
+input_box.grid(row=2, column=1, padx=5, pady=5)
+choice_list.grid(row=2, column=0, padx=5, pady=5)
+
+# text frame
+login_label = Label(text_frame, text="Login: ", width=10, bg=main_color, font=main_font)
+login_text = Text(text_frame, height=1, width=30,  borderwidth=2, font=main_font)
+#login_text.insert(END, "položka seznamu")
+login_label.grid(row=0, column=0, padx=5, pady=5)
+login_text.grid(row=0, column=1, padx=5, pady=5)
+
+password_label = Label(text_frame, text="Password: ", width=10, bg=main_color, font=main_font, anchor="e")
+password_text = Text(text_frame, height=1, width=30, borderwidth=2, font=main_font)
+#password_text.insert(END, "položka")
+password_label.grid(row=1, column=0, padx=5, pady=5)
+password_text.grid(row=1, column=1, padx=5, pady=5)
+
+note_scrollbar = Scrollbar(text_frame)
+note_scrollbar.grid(row=2, column=2, sticky=N+S)
+
+note_label = Label(text_frame, text="Poznámka: ", width=10, bg=main_color, font=main_font)
+note_text = Text(text_frame,height=7, width=30, borderwidth=2, font=main_font, wrap=WORD, yscrollcommand=note_scrollbar.set)
+note_label.grid(row=2, column=0, padx=5, pady=5)
+note_text.grid(row=2, column=1, padx=5, pady=5)
+
+# button frame
+edit_button = Button(buttons_frame, text="Editovat", width=10, fg=front_color, font=main_font, bg=button_color)
+close_button = Button(buttons_frame, text="Zavřít", width=10, fg=front_color, font=main_font , bg=button_color, command=window.destroy)
+edit_button.grid(row=0, column=0, padx=20, pady=20)
+close_button.grid(row=0, column=1, padx=20, pady=20)
 
 
-# function import datas (načtení databáze)
-def import_db():
-    with open('data.json', 'r') as file:
-        return json.load(file)
-
-
-# function save datas (uložení nové databáze)
-def save_db(database):
-    with open('data.json', 'w') as file:
-        json.dump(database, file)
-
-
-# create list (vytvoření listu podle klíče např. list názvů, list loginu atd.)
-def list_cycle(data, key):
-    list_passwords = []
-    for i in range(0, len(data)):
-        list_passwords.append(data[i][key])
-    return list_passwords
-
-
-# filter database by input (vyfiltruje novou databázi podle vstupu)
-def filter_list(data, key):
-    list_passwords = []
-    for i in range(0, len(data)):
-        for j in range(0, len(data[i]['alias'])):
-            if key in data[i]['alias'][j]:
-                list_passwords.append(data[i])
-    return list_passwords
-
-
-# choice datas (výběr z filtrované databáze a výpis dat)
-def choice_password(data, names, num):
-    for i in range(0, len(data)):
-        if data[i]['name'] == names[num]:
-            print("Login: ", data[i]['name'])
-            print("Heslo: ", data[i]['password'])
-            print("Poznámka: ", data[i]['note'])
-
-
-# add new datas to database
-def add_new_password(data, name, password, alias, note):
-    new_data = {}
-    new_data["alias"]: List[str] = []
-    new_data["name"] = name
-    new_data["password"] = password
-    new_data["alias"] = alias
-    new_data["note"] = note
-    data.append(new_data)
-    save_db(data)
-
-
-# update password (úprava údaju u hesla)
-# zatím není naprogramováno
-def add_new_password(data, name, password, alias, note):
-    new_data = {}
-    new_data["alias"]: List[str] = []
-    new_data["name"] = name
-    new_data["password"] = password
-    new_data["alias"] = alias
-    new_data["note"] = note
-    data.append(new_data)
-    save_db(data)
-
-
-test = import_db()
-enter = input("Hledej: ")
-new = list_cycle(filter_list(test, enter), 'name')
-enter2 = int(input("výběr hesla: "))
-choice_password(test, new, enter2)
+window.mainloop()
