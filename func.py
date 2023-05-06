@@ -3,8 +3,8 @@ from typing import List
 
 
 # function import datas (načtení databáze)
-def import_db():
-    with open('data.json', 'r') as file:
+def import_db(data):
+    with open(data, 'r') as file:
         return json.load(file)
 
 
@@ -33,13 +33,21 @@ def filter_list(data, key):
 
 
 # choice datas (výběr z filtrované databáze a výpis dat)
-def choice_password(data, names, num):
+def choice_password(data, names):
+    global login
+    global password
+    global note
     for i in range(0, len(data)):
-        if data[i]['name'] == names[num]:
-            print("Login: ", data[i]['name'])
-            print("Heslo: ", data[i]['password'])
-            print("Poznámka: ", data[i]['note'])
+        if data[i]['name'] == names:
+            login = data[i]['name']
+            password = data[i]['password']
+            note = data[i]['note']
+    return [login, password, note]
 
+
+# find alias
+def find_alias(new, data, key):
+    new = list_cycle(filter_list(data, key), 'name')
 
 # add new datas to database
 def add_new_password(data, name, password, alias, note):
@@ -65,9 +73,17 @@ def add_new_password(data, name, password, alias, note):
     data.append(new_data)
     save_db(data)
 
+# function search button
+def action_with_arg(choice_list, data, input_box):
+    choice_list['values'] = (list_cycle(filter_list(data, input_box.get()), 'name'))
 
-test = import_db()
-enter = input("Hledej: ")
-new = list_cycle(filter_list(test, enter), 'name')
-enter2 = int(input("výběr hesla: "))
-choice_password(test, new, enter2)
+# combobox search
+def callback(self, choice_list):
+    self.promena = choice_list.get()
+    print(self.promena)
+#test = import_db('data.json')
+#enter = input("Hledej: ")
+#new = list_cycle(filter_list(test, enter), 'name')
+#print(new)
+#enter2 = int(input("výběr hesla: "))
+#choice_password(test, new, enter2)
