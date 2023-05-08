@@ -12,6 +12,7 @@ def create_main_window():
 
     # fonts and colors
     main_font = ("Verdana", 12)
+    name_font = ("Verdana", 16, "bold")
     main_color = "#e5eaf1"
     button_color = "#334560"
     front_color = "#f0f3f7"
@@ -34,8 +35,9 @@ def create_main_window():
     choice_list = ttk.Combobox(input_frame, width=22, font=main_font, values=list_cycle(data, 'name'))
     def action_with_arg():
         choice_list.set('')  # vymazání hodnoty comboboxu
-        choice_list['values'] = (list_cycle(filter_list(data, input_box.get()), 'name'))
-        input_box.delete(0, 'end')  # vymazání zadávacího pole
+        choice_list['values'] = (list_cycle(filter_list(data, input_box.get().lower()), 'name'))
+        #input_box.delete(0, 'end')  # vymazání zadávacího pole
+
     def callback(self):
         global result
         self.choice = choice_list.get()
@@ -51,35 +53,37 @@ def create_main_window():
     ok_button.grid(row=2, column=2, padx=5, pady=5)
 
     # text frame
+    name_label = Label(text_frame, text="Název", width=30, bg=main_color, font=name_font, anchor="center")
+    name_label.grid(row=0, column=0, columnspan=3, padx=5, pady=5)
+
     login_label = Label(text_frame, text="Login: ", width=10, bg=main_color, font=main_font, anchor=W)
     login_text = Text(text_frame, height=1, width=30,  borderwidth=2, font=main_font)
-    login_label.grid(row=0, column=0, padx=5, pady=5)
-    login_text.grid(row=0, column=1, padx=5, pady=5)
+    login_label.grid(row=1, column=0, padx=5, pady=5)
+    login_text.grid(row=1, column=1, padx=5, pady=5)
 
     password_label = Label(text_frame, text="Password: ", width=10, bg=main_color, font=main_font, anchor=W)
     password_text = Text(text_frame, height=1, width=30, borderwidth=2, font=main_font)
-    password_label.grid(row=1, column=0, padx=5, pady=5)
-    password_text.grid(row=1, column=1, padx=5, pady=5)
+    password_label.grid(row=2, column=0, padx=5, pady=5)
+    password_text.grid(row=2, column=1, padx=5, pady=5)
 
     note_scrollbar = Scrollbar(text_frame)
-    note_scrollbar.grid(row=2, column=2, sticky=N+S)
+    note_scrollbar.grid(row=3, column=2, sticky=N+S)
 
 
     note_label = Label(text_frame, text="Poznámka: ", width=10, bg=main_color, font=main_font, anchor=W)
     note_text = Text(text_frame,height=7, width=30, borderwidth=2, font=main_font, wrap=WORD, yscrollcommand=note_scrollbar.set)
-    note_label.grid(row=2, column=0, padx=5, pady=5)
-    note_text.grid(row=2, column=1, padx=5, pady=5)
+    note_label.grid(row=3, column=0, padx=5, pady=5)
+    note_text.grid(row=3, column=1, padx=5, pady=5)
 
     def write_result(result):
+        name_label.config(text=result[0])
         login_text.delete(1.0,END)
-        login_text.insert(END, result[0])
+        login_text.insert(END, result[1])
         password_text.delete(1.0,END)
-        password_text.insert(END, result[1])
+        password_text.insert(END, result[2])
         note_text.delete(1.0,END)
-        note_text.insert(END, result[2])
+        note_text.insert(END, result[3])
 
-    def edit_window():
-        edit_w()
 
     # button frame
     edit_button = Button(buttons_frame, text="Editovat", width=8, fg=front_color, font=main_font, bg=button_color, command=lambda: edit_w(main_window))
@@ -104,6 +108,7 @@ def edit_w(main_window):
 
     # fonts and colors
     main_font = ("Verdana", 12)
+    name_font = ("Verdana", 16, "bold")
     main_color = "#e5eaf1"
     button_color = "#334560"
     front_color = "#f0f3f7"
@@ -148,41 +153,48 @@ def edit_w(main_window):
     ok_button.grid(row=2, column=2, padx=5, pady=5)
 
     # text frame
+    name_label = Label(text_frame, text="Název: ", width=10, bg=main_color, font=main_font, anchor=W)
+    name_text = Text(text_frame, height=1, width=30, borderwidth=2, font=main_font)
+    name_label.grid(row=0, column=0, padx=5, pady=5)
+    name_text.grid(row=0, column=1, padx=5, pady=5)
+
     login_label = Label(text_frame, text="Login: ", width=10, bg=main_color, font=main_font, anchor=W)
     login_text = Text(text_frame, height=1, width=30, borderwidth=2, font=main_font)
-    login_label.grid(row=0, column=0, padx=5, pady=5)
-    login_text.grid(row=0, column=1, padx=5, pady=5)
+    login_label.grid(row=1, column=0, padx=5, pady=5)
+    login_text.grid(row=1, column=1, padx=5, pady=5)
 
     password_label = Label(text_frame, text="Password: ", width=10, bg=main_color, font=main_font, anchor=W)
     password_text = Text(text_frame, height=1, width=30, borderwidth=2, font=main_font)
-    password_label.grid(row=1, column=0, padx=5, pady=5)
-    password_text.grid(row=1, column=1, padx=5, pady=5)
+    password_label.grid(row=2, column=0, padx=5, pady=5)
+    password_text.grid(row=2, column=1, padx=5, pady=5)
 
     note_scrollbar = Scrollbar(text_frame)
-    note_scrollbar.grid(row=2, column=2, sticky=N + S)
+    note_scrollbar.grid(row=3, column=2, sticky=N + S)
 
     note_label = Label(text_frame, text="Poznámka: ", width=10, bg=main_color, font=main_font, anchor=W)
     note_text = Text(text_frame, height=7, width=30, borderwidth=2, font=main_font, wrap=WORD,
                      yscrollcommand=note_scrollbar.set)
-    note_label.grid(row=2, column=0, padx=5, pady=5)
-    note_text.grid(row=2, column=1, padx=5, pady=5)
+    note_label.grid(row=3, column=0, padx=5, pady=5)
+    note_text.grid(row=3, column=1, padx=5, pady=5)
 
     alias_label = Label(text_frame, text="Alias: ", width=10, bg=main_color, font=main_font, anchor=W)
     alias_text = Text(text_frame, height=7, width=30, borderwidth=2, font=main_font, wrap=WORD)
-    alias_label.grid(row=3, column=0, padx=5, pady=5)
-    alias_text.grid(row=3, column=1, padx=5, pady=5)
+    alias_label.grid(row=4, column=0, padx=5, pady=5)
+    alias_text.grid(row=4, column=1, padx=5, pady=5)
 
 
 
     def write_result(result):
+        name_text.delete(1.0, END)
+        name_text.insert(END, result[0])
         login_text.delete(1.0, END)
-        login_text.insert(END, result[0])
+        login_text.insert(END, result[1])
         password_text.delete(1.0, END)
-        password_text.insert(END, result[1])
+        password_text.insert(END, result[2])
         note_text.delete(1.0, END)
-        note_text.insert(END, result[2])
+        note_text.insert(END, result[3])
         alias_text.delete(1.0, END)
-        alias_text.insert(END, result[3])
+        alias_text.insert(END, result[4])
 
     # button frame
     def close_window():
@@ -191,8 +203,8 @@ def edit_w(main_window):
         create_main_window()
 
 
-    save_button = Button(buttons_frame, text="Uložit", width=8, fg=front_color, font=main_font, bg=button_color, command=lambda: (update_data(result, login_text.get(1.0, END), password_text.get(1.0, END), note_text.get(1.0, END), alias_text.get(1.0, END), window), edit_w(main_window)))
-    add_button = Button(buttons_frame, text="Přidat", width=8, fg=front_color, font=main_font, bg=button_color, command=lambda: (add_new_password(data, login_text.get(1.0, END), password_text.get(1.0, END), alias_text.get(1.0, END), note_text.get(1.0, END), window), edit_w(main_window)))
+    save_button = Button(buttons_frame, text="Uložit", width=8, fg=front_color, font=main_font, bg=button_color, command=lambda: (update_data(result,name_text.get(1.0, END), login_text.get(1.0, END), password_text.get(1.0, END), note_text.get(1.0, END), alias_text.get(1.0, END), window), edit_w(main_window)))
+    add_button = Button(buttons_frame, text="Přidat", width=8, fg=front_color, font=main_font, bg=button_color, command=lambda: (add_new_password(data,name_text.get(1.0, END), login_text.get(1.0, END), password_text.get(1.0, END), alias_text.get(1.0, END), note_text.get(1.0, END), window), edit_w(main_window)))
     delete_button = Button(buttons_frame, text="Vymazat", width=8, fg=front_color, font=main_font, bg=button_color, command=lambda: (delete_data(result, window), edit_w(main_window)))
     close_button = Button(buttons_frame, text="Zavřít", width=8, fg=front_color, font=main_font, bg=button_color, command=close_window)
     save_button.grid(row=0, column=0, padx=5, pady=20)
