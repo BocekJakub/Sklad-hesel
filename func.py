@@ -27,24 +27,27 @@ def filter_list(data, key):
     list_passwords = []
     for i in range(0, len(data)):
         for j in range(0, len(data[i]['alias'])):
-            if key in data[i]['alias'][j]:
+            if key in data[i]['alias']:
                 list_passwords.append(data[i])
+                break
     return list_passwords
 
 
 # choice datas (výběr z filtrované databáze a výpis dat)
 def choice_password(data, names):
+    global name
     global login
     global password
     global note
     global alias
     for i in range(0, len(data)):
         if data[i]['name'] == names:
-            login = data[i]['name']
+            name = data[i]['name']
+            login = data[i]['login']
             password = data[i]['password']
             note = data[i]['note']
             alias = data[i]['alias']
-    return [login, password, note, alias]
+    return [name, login, password, note, alias]
 
 
 # find alias
@@ -52,12 +55,15 @@ def find_alias(new, data, key):
     new = list_cycle(filter_list(data, key), 'name')
 
 # add new datas to database
-def add_new_password(data, name, password, alias, note, win):
+def add_new_password(data, name, login, password, alias, note, win):
+    new_alias = alias.strip("\n")
+    new_alias = new_alias.lower()
     new_password = {
-        "alias": alias.strip("\n"),
         "name": name.strip("\n"),
+        "login": login.strip("\n"),
         "password": password.strip("\n"),
-        "note": note.strip("\n")
+        "note": note.strip("\n"),
+        "alias": new_alias
     }
     data.append(new_password)
     save_db(data)
@@ -66,15 +72,18 @@ def add_new_password(data, name, password, alias, note, win):
     win.destroy()
 
 # update data (úprava údaju u hesla)
-def update_data(selected_item, login, password, note, alias, win):
+def update_data(selected_item, name, login, password, note, alias, win):
+    new_alias = alias.strip("\n")
+    new_alias = new_alias.lower()
     with open('data.json', 'r') as file:
         data = json.load(file)
     for item in data:
         if item['name'] == selected_item[0]:
+            item['name'] = name
             item['login'] = login
             item['password'] = password
             item['note'] = note
-            item['alias'] = alias
+            item['alias'] = new_alias
             break
     with open('data.json', 'w') as file:
         json.dump(data, file, indent=4)
